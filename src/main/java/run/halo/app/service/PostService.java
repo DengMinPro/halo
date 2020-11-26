@@ -110,6 +110,16 @@ public interface PostService extends BasePostService<Post> {
     Post getBy(@NonNull Integer year, @NonNull Integer month, @NonNull String slug);
 
     /**
+     * Gets post by post year and slug.
+     *
+     * @param year  post create year.
+     * @param slug  post slug.
+     * @return post info
+     */
+    @NonNull
+    Post getBy(@NonNull Integer year, @NonNull String slug);
+
+    /**
      * Gets post by post year and month and slug.
      *
      * @param year   post create year.
@@ -265,4 +275,5 @@ public interface PostService extends BasePostService<Post> {
      */
     @NotNull
     Sort getPostDefaultSort();
+
 }

@@ -1,27 +1,37 @@
 package run.halo.app.model.properties;
 
 /**
- * Netlify static deploy properties.
+ * Minio properties.
  *
- * @author ryanwang
- * @date 2019-12-26
+ * @author Wh1te
+ * @date 2020-10-03
  */
-public enum NetlifyStaticDeployProperties implements PropertyEnum {
+public enum MinioProperties implements PropertyEnum {
 
     /**
-     * Netlify static deploy domain.
+     * Minio endpoint.
      */
-    NETLIFY_DOMAIN("netlify_static_deploy_domain", String.class, ""),
+    ENDPOINT("minio_endpoint", String.class, ""),
 
     /**
-     * Netlify static deploy site id.
+     * Minio bucket name.
      */
-    NETLIFY_SITE_ID("netlify_static_deploy_site_id", String.class, ""),
+    BUCKET_NAME("minio_bucket_name", String.class, ""),
 
     /**
-     * Netlify static deploy token.
+     * Minio access key.
      */
-    NETLIFY_TOKEN("netlify_static_deploy_token", String.class, "");
+    ACCESS_KEY("minio_access_key", String.class, ""),
+
+    /**
+     * Minio access secret.
+     */
+    ACCESS_SECRET("minio_access_secret", String.class, ""),
+
+    /**
+     * Minio source
+     */
+    SOURCE("minio_source", String.class, "");
 
     private final String value;
 
@@ -29,7 +39,7 @@ public enum NetlifyStaticDeployProperties implements PropertyEnum {
 
     private final String defaultValue;
 
-    NetlifyStaticDeployProperties(String value, Class<?> type, String defaultValue) {
+    MinioProperties(String value, Class<?> type, String defaultValue) {
         this.defaultValue = defaultValue;
         if (!PropertyEnum.isSupportedType(type)) {
             throw new IllegalArgumentException("Unsupported blog property type: " + type);

@@ -7,6 +7,7 @@ import run.halo.app.service.ThemeService;
 
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * GithubUtils send request to api.github.com
@@ -145,7 +146,7 @@ public class GithubUtils {
         private HashMap<String, Object> result;
 
         public GithubRelease(String repoUrl, String tagName) {
-            this.repoUrl = repoUrl;
+            this.repoUrl = StringUtils.removeEndIgnoreCase(repoUrl, ".git");
             this.tagName = tagName;
             result = null;
         }
@@ -205,8 +206,7 @@ public class GithubUtils {
         private List<String> result;
 
         public GithubReleases(String repoUrl) {
-            this.repoUrl = repoUrl;
-            result = null;
+            this.repoUrl = StringUtils.removeEndIgnoreCase(repoUrl, ".git");
         }
 
         @Override
@@ -260,7 +260,7 @@ public class GithubUtils {
         private HashMap<String, Object> result;
 
         public GithubLatestRelease(String repoUrl) {
-            this.repoUrl = repoUrl;
+            this.repoUrl = StringUtils.removeEndIgnoreCase(repoUrl, ".git");
             result = null;
         }
 
@@ -298,7 +298,7 @@ public class GithubUtils {
                 }
 
                 try {
-                    Thread.sleep(2000);
+                    TimeUnit.SECONDS.sleep(2);
                 } catch (InterruptedException e) {
                     break;
                 }
@@ -322,7 +322,7 @@ public class GithubUtils {
         private String result;
 
         public GithubFile(String repoUrl, String branch) {
-            this.repoUrl = repoUrl;
+            this.repoUrl = StringUtils.removeEndIgnoreCase(repoUrl, ".git");
             this.branch = branch;
             result = null;
         }
