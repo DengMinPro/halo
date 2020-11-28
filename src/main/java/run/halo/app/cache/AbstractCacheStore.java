@@ -23,10 +23,10 @@ public abstract class AbstractCacheStore<K, V> implements CacheStore<K, V> {
     protected HaloProperties haloProperties;
 
     /**
-     * Get cache wrapper by key.
+     * 通过键获取缓存包装器
      *
-     * @param key key must not be null
-     * @return an optional cache wrapper
+     * @param key key不能为空
+     * @return 可选的缓存包装器
      */
     @NonNull
     abstract Optional<CacheWrapper<V>> getInternal(@NonNull K key);
@@ -50,18 +50,18 @@ public abstract class AbstractCacheStore<K, V> implements CacheStore<K, V> {
 
     @Override
     public Optional<V> get(K key) {
-        Assert.notNull(key, "Cache key must not be blank");
+        Assert.notNull(key, "缓存键不能为空");
 
         return getInternal(key).map(cacheWrapper -> {
-            // Check expiration
+            // 检查是否到期
             if (cacheWrapper.getExpireAt() != null && cacheWrapper.getExpireAt().before(run.halo.app.utils.DateUtils.now())) {
-                // Expired then delete it
-                log.warn("Cache key: [{}] has been expired", key);
+                // 已过期然后将其删除
+                log.warn("Cache key: [{}] 已经过期", key);
 
-                // Delete the key
+                // 删除key
                 delete(key);
 
-                // Return null
+                // 返回空
                 return null;
             }
 

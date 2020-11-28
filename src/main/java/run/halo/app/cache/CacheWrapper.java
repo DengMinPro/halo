@@ -18,12 +18,12 @@ import java.util.Date;
 class CacheWrapper<V> implements Serializable {
 
     /**
-     * Cache data
+     * 缓存数据
      */
     private V data;
 
     /**
-     * Expired time.
+     * 过期时间
      */
     private Date expireAt;
 

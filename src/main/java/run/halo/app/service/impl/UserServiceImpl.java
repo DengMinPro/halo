@@ -177,8 +177,8 @@ public class UserServiceImpl extends AbstractCrudService<User, Integer> implemen
 
     @Override
     public void setPassword(@NonNull User user, @NonNull String plainPassword) {
-        Assert.notNull(user, "User must not be null");
-        Assert.hasText(plainPassword, "Plain password must not be blank");
+        Assert.notNull(user, "用户不能为空");
+        Assert.hasText(plainPassword, "普通密码不能为空");
 
         user.setPassword(BCrypt.hashpw(plainPassword, BCrypt.gensalt()));
         user.setMfaType(MFAType.NONE);

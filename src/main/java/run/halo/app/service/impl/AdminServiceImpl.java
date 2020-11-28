@@ -162,10 +162,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @NonNull
     public AuthToken authCodeCheck(@NonNull final LoginParam loginParam) {
-        // get user
+        //获取用户
         final User user = this.authenticate(loginParam);
 
-        // check authCode
+        //检查验证码
         if (MFAType.useMFA(user.getMfaType())) {
             if (StrUtil.isBlank(loginParam.getAuthcode())) {
                 throw new BadRequestException("请输入两步验证码");
@@ -174,14 +174,14 @@ public class AdminServiceImpl implements AdminService {
         }
 
         if (SecurityContextHolder.getContext().isAuthenticated()) {
-            // If the user has been logged in
+            // 如果用户已经登陆
             throw new BadRequestException("您已登录，请不要重复登录");
         }
 
-        // Log it then login successful
+        // 登陆并成功登陆
         eventPublisher.publishEvent(new LogEvent(this, user.getUsername(), LogType.LOGGED_IN, user.getNickname()));
 
-        // Generate new token
+        // 生产新令牌
         return buildAuthToken(user);
     }
 
@@ -258,7 +258,7 @@ public class AdminServiceImpl implements AdminService {
             throw new ServiceException("用户名或者邮箱验证错误");
         }
 
-        // verify code
+        // 验证码
         String code = cacheStore.getAny("code", String.class).orElseThrow(() -> new ServiceException("未获取过验证码"));
         if (!code.equals(param.getCode())) {
             throw new ServiceException("验证码不正确");
@@ -443,20 +443,20 @@ public class AdminServiceImpl implements AdminService {
      */
     @NonNull
     private AuthToken buildAuthToken(@NonNull User user) {
-        Assert.notNull(user, "User must not be null");
+        Assert.notNull(user, "用户不能为空");
 
-        // Generate new token
+        // 生产新token
         AuthToken token = new AuthToken();
 
         token.setAccessToken(HaloUtils.randomUUIDWithoutDash());
         token.setExpiredIn(ACCESS_TOKEN_EXPIRED_SECONDS);
         token.setRefreshToken(HaloUtils.randomUUIDWithoutDash());
 
-        // Cache those tokens, just for clearing
+        //缓存这些令牌，仅用于清除
         cacheStore.putAny(SecurityUtils.buildAccessTokenKey(user), token.getAccessToken(), ACCESS_TOKEN_EXPIRED_SECONDS, TimeUnit.SECONDS);
         cacheStore.putAny(SecurityUtils.buildRefreshTokenKey(user), token.getRefreshToken(), REFRESH_TOKEN_EXPIRED_DAYS, TimeUnit.DAYS);
 
-        // Cache those tokens with user id
+        // 缓存具有用户ID的令牌
         cacheStore.putAny(SecurityUtils.buildTokenAccessKey(token.getAccessToken()), user.getId(), ACCESS_TOKEN_EXPIRED_SECONDS, TimeUnit.SECONDS);
         cacheStore.putAny(SecurityUtils.buildTokenRefreshKey(token.getRefreshToken()), user.getId(), REFRESH_TOKEN_EXPIRED_DAYS, TimeUnit.DAYS);
 
