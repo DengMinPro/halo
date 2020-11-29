@@ -65,7 +65,7 @@ public class StartedListener implements ApplicationListener<ApplicationStartedEv
         try {
             this.migrate();
         } catch (SQLException e) {
-            log.error("Failed to migrate database!", e);
+            log.error("迁移数据库失败!", e);
         }
         this.initThemes();
         this.initDirectory();
@@ -74,19 +74,19 @@ public class StartedListener implements ApplicationListener<ApplicationStartedEv
 
     private void printStartInfo() {
         String blogUrl = optionService.getBlogBaseUrl();
-        log.info(AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, "Halo started at         ", blogUrl));
-        log.info(AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, "Halo admin started at   ", blogUrl, "/", haloProperties.getAdminPath()));
+        log.info(AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, "主页面         ", blogUrl));
+        log.info(AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, "管理页面   ", blogUrl, "/", haloProperties.getAdminPath()));
         if (!haloProperties.isDocDisabled()) {
             log.debug(AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, "Halo api doc was enabled at  ", blogUrl, "/swagger-ui.html"));
         }
-        log.info(AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, "Halo has started successfully!"));
+        log.info(AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, "启动成功!"));
     }
 
     /**
      * Migrate database.
      */
     private void migrate() throws SQLException {
-        log.info("Starting migrate database...");
+        log.info("正在开始迁移数据库....");
 
         Flyway flyway = Flyway
                 .configure()
@@ -98,33 +98,36 @@ public class StartedListener implements ApplicationListener<ApplicationStartedEv
         flyway.repair();
         flyway.migrate();
 
-        // Gets database connection
+        //获取数据库连接
         Connection connection = flyway.getConfiguration().getDataSource().getConnection();
 
-        // Gets database metadata
+        // 获取数据库元数据
         DatabaseMetaData databaseMetaData = JdbcUtils.getDatabaseMetaData(connection);
 
         // Gets database product name
+        // 获取数据库名称
         HaloConst.DATABASE_PRODUCT_NAME = databaseMetaData.getDatabaseProductName() + " " + databaseMetaData.getDatabaseProductVersion();
 
         // Close connection.
+        //关闭连接
         connection.close();
 
-        log.info("Migrate database succeed.");
+        log.info("迁移数据库成功");
     }
 
     /**
      * Init internal themes
+     * 初始化内部主题
      */
     private void initThemes() {
-        // Whether the blog has initialized
+        // 博客是否已初始化
         Boolean isInstalled = optionService.getByPropertyOrDefault(PrimaryProperties.IS_INSTALLED, Boolean.class, false);
         try {
             String themeClassPath = ResourceUtils.CLASSPATH_URL_PREFIX + ThemeService.THEME_FOLDER;
 
             URI themeUri = ResourceUtils.getURL(themeClassPath).toURI();
 
-            log.debug("Theme uri: [{}]", themeUri);
+            log.debug("主题 uri: [{}]", themeUri);
 
             Path source;
 

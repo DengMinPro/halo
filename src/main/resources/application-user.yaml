@@ -15,7 +15,7 @@ spring:
 
     # MySQL database configuration.
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://175.24.126.166/halodb-dev?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://175.24.126.166/dalodb?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       username: dengmin
       password: Deng@0501
 
