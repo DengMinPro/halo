@@ -304,7 +304,7 @@ public class ThemeServiceImpl implements ThemeService {
                 // Resolve the options path
                 Path optionsPath = Paths.get(themeProperty.getThemePath(), optionsName);
 
-                log.debug("Finding options in: [{}]", optionsPath.toString());
+                log.debug("寻找选项: [{}]", optionsPath.toString());
 
                 // Check existence
                 if (!Files.exists(optionsPath)) {
@@ -319,7 +319,7 @@ public class ThemeServiceImpl implements ThemeService {
             }
 
             return Collections.emptyList();
-        } catch (IOException e) {
+        } catch (IOException e) {    
             throw new ServiceException("读取主题配置文件失败", e);
         }
     }

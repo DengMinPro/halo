@@ -65,7 +65,7 @@ public class ThemeProperty {
     private Author author;
 
     /**
-     * Theme full path.
+     * 主题完整路径
      */
     private String themePath;
 

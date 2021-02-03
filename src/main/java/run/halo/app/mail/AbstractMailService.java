@@ -75,7 +75,7 @@ public abstract class AbstractMailService implements MailService {
      */
     protected void sendMailTemplate(@Nullable Callback callback) {
         if (callback == null) {
-            log.info("Callback is null, skip to send email");
+            log.info("回掉为空，跳过已发送邮件");
             return;
         }
 

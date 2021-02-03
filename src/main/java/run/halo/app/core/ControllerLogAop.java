@@ -35,28 +35,35 @@ public class ControllerLogAop {
 
     @Around("controller()")
     public Object controller(ProceedingJoinPoint joinPoint) throws Throwable {
+        //获取目标类的名称
         String className = joinPoint.getTarget().getClass().getSimpleName();
+        //获取方法名称
         String methodName = joinPoint.getSignature().getName();
+        //获取参数
         Object[] args = joinPoint.getArgs();
 
-        // Get request attribute
+        //获取请求属性
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = Objects.requireNonNull(requestAttributes).getRequest();
 
+        //打印日志
         printRequestLog(request, className, methodName, args);
         long start = System.currentTimeMillis();
         Object returnObj = joinPoint.proceed();
+        //打印返回体数据
         printResponseLog(request, className, methodName, returnObj, System.currentTimeMillis() - start);
         return returnObj;
     }
 
 
     private void printRequestLog(HttpServletRequest request, String clazzName, String methodName, Object[] args) throws JsonProcessingException {
-        log.debug("Request URL: [{}], URI: [{}], Request Method: [{}], IP: [{}]",
+        log.debug("请求链接: [{}], URI: [{}], 请求方法: [{}], IP: [{}]",
                 request.getRequestURL(),
                 request.getRequestURI(),
                 request.getMethod(),
                 ServletUtil.getClientIP(request));
+
+        //保存请求信息
 
         if (args == null || !log.isDebugEnabled()) {
             return;
@@ -88,7 +95,7 @@ public class ControllerLogAop {
                 if (returnObj instanceof ResponseEntity) {
                     ResponseEntity responseEntity = (ResponseEntity) returnObj;
                     if (responseEntity.getBody() instanceof Resource) {
-                        returnData = "[ BINARY DATA ]";
+                        returnData = "[ 二进制数据 ]";
                     } else {
                         returnData = toString(responseEntity.getBody());
                     }
@@ -107,7 +114,7 @@ public class ControllerLogAop {
 
         String toString = "";
         if (obj.getClass().isAssignableFrom(byte[].class) && obj instanceof Resource) {
-            toString = "[ BINARY DATA ]";
+            toString = "[ 二进制数据 ]";
         } else {
             toString = JsonUtils.objectToJson(obj);
         }
